@@ -30,9 +30,9 @@ const CreateRoom = ({ params }: any) => {
   const handleCreateRoom = async () => {
     const random6DigitNumber = await generateRandom6DigitNumber();
 
-    if (isConnected) {
-      socket.emit("create", {
-        roomID: random6DigitNumber,
+    if (isConnected && random6DigitNumber != undefined) {
+      await socket.emit("create", {
+        roomID: random6DigitNumber.toString(),
         numPlayer: numPlayers,
         player: name,
       });

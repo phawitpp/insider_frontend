@@ -23,13 +23,13 @@ export default function GameMenu() {
         id="nickname"
         type="text"
         value={nickname}
-        className="input input-md"
+        className="input input-md bg-slate-800 text-white"
         placeholder="Set player name"
         onChange={(e) => setNickname(e.target.value)}
       />
 
       <a
-        className="btn text-white input-md tracking-widest"
+        className="btn text-white input-md tracking-widest bg-slate-800 border-0"
         onClick={() => {
           if (nickname.length > 0) {
             setName(nickname);
@@ -45,11 +45,11 @@ export default function GameMenu() {
       </a>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Oops!</h3>
-          <p className="py-4">Press set the player name first .</p>
+          <h3 className="font-bold text-lg text-white">Oops!</h3>
+          <p className="py-4 text-white">Press set the player name first .</p>
           <div className="modal-action">
             <form method="dialog">
-              <button className="btn">Close</button>
+              <button className="btn bg-slate-800">Close</button>
             </form>
           </div>
         </div>
@@ -69,12 +69,21 @@ export default function GameMenu() {
         id="room-code-input"
         type="text"
         value={roomCode}
-        className="input input-md"
+        className="input input-md bg-slate-800"
         onChange={(e) => {
           if (e.target.value.length >= 6) {
-            setName(nickname);
-            socket.emit("join", { roomId: e.target.value, player: nickname });
-            router.push(`/${"en"}/room/${e.target.value}`);
+            if (nickname.length > 0) {
+              setName(nickname);
+              socket.emit("join", {
+                roomId: e.target.value.toString(),
+                player: nickname,
+              });
+              router.replace(`/${"en"}/room/${e.target.value}`);
+            } else {
+              (
+                document.getElementById("my_modal_1") as HTMLDialogElement
+              )?.showModal();
+            }
           }
           setRoomCode(e.target.value);
         }}
@@ -100,7 +109,7 @@ export default function GameMenu() {
               console.info(error);
             }
           }}
-          constraints={{ facingMode: "user" }}
+          constraints={{ facingMode: "environment" }}
         />
       )}
     </div>
