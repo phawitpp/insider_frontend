@@ -44,12 +44,12 @@ export default function GameMenu() {
         Create Game
       </a>
       <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
+        <div className="modal-box bg-slate-800">
           <h3 className="font-bold text-lg text-white">Oops!</h3>
           <p className="py-4 text-white">Press set the player name first .</p>
           <div className="modal-action">
             <form method="dialog">
-              <button className="btn bg-slate-800">Close</button>
+              <button className="btn bg-slate-800 text-white">Close</button>
             </form>
           </div>
         </div>

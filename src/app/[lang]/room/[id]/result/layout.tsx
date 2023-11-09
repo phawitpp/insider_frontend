@@ -6,11 +6,10 @@ export default function RoomLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col justify-between p-10">
-      <Navbar />
-      {children}
-
-      <div></div>
-    </div>
+    <>
+      <div className=" justify-center flex flex-col items-center">
+        {children}
+      </div>
+    </>
   );
 }

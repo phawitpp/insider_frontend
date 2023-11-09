@@ -2,22 +2,50 @@
 import { useState, useEffect } from "react";
 import { useGameStore } from "@/utils/storeProvider";
 import { useSocket } from "@/utils/socketProvider";
-
+import { BsQuestion, BsExclamationLg } from "react-icons/bs";
+import { AiFillEye } from "react-icons/ai";
+import { useRouter } from "next/navigation";
 const GameStart = ({ params, roomdetail }: any) => {
   const [countdown, setCountdown] = useState(3);
   const [isCountdown, setIsCountdown] = useState(true);
-  const [roomDetail, setRoomDetail] = useState<any>(roomdetail);
+  const [gameCountdown, setGameCountdown] = useState(300);
+  const [isStartCountdown, setIsStartCountdown] = useState(false);
+  const [discussCountdown, setDiscussCountdown] = useState(120);
+  const [isDiscussCountdown, setIsDiscussCountdown] = useState(false);
+  const [votePlayer, setVotePlayer] = useState<any>(null);
   const [role, setRole] = useState<any>(null);
   const [word, setWord] = useState<any>(null);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
   const { socket, isConnected } = useSocket();
   const { name }: any = useGameStore();
-
+  const router = useRouter();
   useEffect(() => {
     socket.on("getrole", (data: any) => {
-      console.log(data);
       setRole(data.role);
       setWord(data.word);
     });
+    socket.on("starttimer", () => {
+      setIsStartCountdown(true);
+    });
+    socket.on("stoptimer", () => {
+      setIsStartCountdown(false);
+    });
+    socket.on("gameover", () => {
+      setIsStartCountdown(false);
+      setIsGameOver(true);
+    });
+    socket.on("startdiscussion", () => {
+      setIsDiscussCountdown(true);
+    });
+    socket.on("stopdiscussion", () => {
+      setIsDiscussCountdown(false);
+    });
+    socket.on("voting", () => {
+      setIsVoting(true);
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,6 +53,7 @@ const GameStart = ({ params, roomdetail }: any) => {
     }, 1000);
     socket.emit("role", { roomId: params.id });
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -32,7 +61,44 @@ const GameStart = ({ params, roomdetail }: any) => {
       setIsCountdown(false);
     }
   }, [countdown]);
+  //game countdown 5 mins
+  useEffect(() => {
+    if (gameCountdown >= 0 && isStartCountdown) {
+      const intervalId = setInterval(() => {
+        setGameCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
 
+      return () => clearInterval(intervalId);
+    }
+
+    if (gameCountdown == 0) {
+      socket.emit("gameover", { roomId: params.id });
+      setIsStartCountdown(false);
+      setIsGameOver(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameCountdown, isStartCountdown]);
+
+  //discussion countdown 2 mins
+  useEffect(() => {
+    if (discussCountdown >= 0 && isDiscussCountdown) {
+      const intervalId = setInterval(() => {
+        setDiscussCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+
+    if (discussCountdown == 0) {
+      socket.emit("voting", { roomId: params.id });
+      setIsDiscussCountdown(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [discussCountdown, isDiscussCountdown]);
+  const minutes = Math.floor(gameCountdown / 60);
+  const seconds = gameCountdown % 60;
+  const discussMinutes = Math.floor(discussCountdown / 60);
+  const discussSeconds = discussCountdown % 60;
   return (
     <>
       {isCountdown ? (
@@ -42,38 +108,255 @@ const GameStart = ({ params, roomdetail }: any) => {
       ) : (
         <>
           <div className="flex flex-col justify-center items-center">
-            <h1 className="font-bold text-2xl text-black"> GO!</h1>
-            {
-              // @ts-ignore
-              role == "insider" ? (
-                <h1 className="font-bold text-2xl text-black">
-                  You are a Insinder!
-                </h1>
-              ) : role == "master" ? (
-                <h1 className="font-bold text-2xl text-black">
-                  You are a Master!
-                </h1>
-              ) : (
-                <h1 className="font-bold text-2xl text-black">
-                  You are a Common!
-                </h1>
-              )
-            }
-            {
-              // @ts-ignore
-              role == "common" ? (
-                <h1 className="font-bold text-2xl text-black">
-                  Guess the word!
-                </h1>
-              ) : (
-                <h1 className="font-bold text-2xl text-black">
-                  Your word is: {word}
-                </h1>
-              )
-            }
-            <button className="btn btn-md bg-slate-800 text-white">
-              Reveal Your role
-            </button>
+            {!isGameOver ? (
+              //Guessing
+              <>
+                <div className="flex flex-col lg:flex-row">
+                  {
+                    // @ts-ignore
+                    role == "insider" ? (
+                      <div className="card  shadow-xl bg-stone-900 text-white">
+                        <figure>
+                          <AiFillEye className="text-8xl my-10" />
+                        </figure>
+                        <div className="card-body">
+                          <h1 className="card-title text-center text-2xl justify-center">
+                            You are a insider
+                          </h1>
+                          <p className=" justify-center card-body items-center">
+                            The word is {"" + word + ""}
+                          </p>
+                        </div>
+                      </div>
+                    ) : role == "master" ? (
+                      <div className="card shadow-xl bg-stone-900 text-white">
+                        <figure>
+                          <BsExclamationLg className="text-9xl my-6" />
+                        </figure>
+                        <div className="card-body">
+                          <h1 className="card-title text-center text-2xl justify-center">
+                            You are a Master
+                          </h1>
+                          <p className=" justify-center card-body items-center">
+                            The word is {"" + word + ""}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="card  shadow-xl bg-stone-900 text-white">
+                        <figure>
+                          <BsQuestion className="text-9xl my-6" />
+                        </figure>
+                        <div className="card-body">
+                          <h1 className="card-title text-center text-2xl justify-center">
+                            You are a common
+                          </h1>
+                          <p className=" justify-center card-body items-center">
+                            Guess the word!
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  }
+                  <div className=" items-center justify-center flex flex-col p-4 gap-3">
+                    <div></div>
+                    <div className=" divider text-black"> Time Left</div>
+                    <span className="font-bold text-5xl text-white">
+                      {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                    </span>
+                    {role == "master" ? (
+                      <>
+                        {isStartCountdown ? (
+                          <div className="flex flex-col gap-2">
+                            <button
+                              className="btn bg-stone-900  text-white tracking-widest"
+                              onClick={() => {
+                                socket.emit("stoptimer", { roomId: params.id });
+                              }}
+                            >
+                              Stop Timer
+                            </button>
+                            <button
+                              className="btn border-0 bg-gray-700 text-white tracking-widest"
+                              onClick={() => {
+                                socket.emit("gameover", { roomId: params.id });
+                              }}
+                            >
+                              Word is guessed !!
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex">
+                            <button
+                              className="btn bg-stone-900  text-white tracking-widest"
+                              onClick={() => {
+                                socket.emit("starttimer", {
+                                  roomId: params.id,
+                                });
+                              }}
+                            >
+                              Start Timer
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {
+                  //discussion
+                  !isVoting ? (
+                    <>
+                      <h1 className=" text-white text-3xl">Discussion</h1>
+                      <div></div>
+                      <div className=" divider text-black"> Time Left</div>
+                      <span className="font-bold text-5xl text-white">
+                        {discussMinutes}:
+                        {discussSeconds < 10
+                          ? `0${discussSeconds}`
+                          : discussSeconds}
+                      </span>
+                      <div className="flex flex-col gap-2 mt-4">
+                        {isDiscussCountdown ? (
+                          <>
+                            {role == "master" ? (
+                              <>
+                                <button
+                                  className="btn bg-stone-900  text-white tracking-widest"
+                                  onClick={() => {
+                                    socket.emit("stopdiscussion", {
+                                      roomId: params.id,
+                                    });
+                                  }}
+                                >
+                                  Stop Discussion
+                                </button>
+                                <button
+                                  className="btn border-0 bg-gray-700 text-white tracking-widest"
+                                  onClick={() => {
+                                    socket.emit("voting", {
+                                      roomId: params.id,
+                                    });
+                                  }}
+                                >
+                                  Voting
+                                </button>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            {
+                              // @ts-ignore
+                              role == "master" ? (
+                                <button
+                                  className="btn bg-stone-900  text-white tracking-widest"
+                                  onClick={() => {
+                                    socket.emit("startdiscussion", {
+                                      roomId: params.id,
+                                    });
+                                  }}
+                                >
+                                  Start Discussion
+                                </button>
+                              ) : (
+                                <></>
+                              )
+                            }
+                          </>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    //voting
+                    <>
+                      <div className="flex flex-col justify-between gap-10">
+                        <h1 className=" text-white text-5xl">Voting</h1>
+                        <div className=" join join-vertical">
+                          {roomdetail.player.map((player: any) => {
+                            return (
+                              <>
+                                <button
+                                  className={
+                                    player.name != votePlayer
+                                      ? "btn bg-stone-900  text-white tracking-widest join-item no-animation hover:none"
+                                      : "btn bg-white text-black tracking-widest border-0 join-item no-animation hover:none"
+                                  }
+                                  onClick={() => {
+                                    setVotePlayer(player.name);
+                                  }}
+                                >
+                                  {player.name}
+                                  {player.name == votePlayer ? (
+                                    <span className="badge bg-red-500 border-0">
+                                      <AiFillEye className="text-white" />
+                                    </span>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </button>
+                              </>
+                            );
+                          })}
+                        </div>
+                        <dialog id="voteconfirm" className="modal">
+                          <div className="modal-box bg-stone-900 text-white">
+                            <h3 className="font-bold text-lg ">Are you sure</h3>
+                            <p className="py-4">
+                              You want to vote for {votePlayer}
+                            </p>
+                            <div className="modal-action">
+                              <form method="dialog">
+                                <button className="btn bg-black text-white">
+                                  Close
+                                </button>
+                              </form>
+                              <button
+                                className="btn bg-black text-white"
+                                onClick={() => {
+                                  socket.emit("voted", {
+                                    roomId: params.id,
+                                    player: votePlayer,
+                                  });
+                                  router.replace(
+                                    `/${params.lang}/room/${params.id}/waiting`
+                                  );
+                                }}
+                              >
+                                Confirm
+                              </button>
+                            </div>
+                          </div>
+                        </dialog>
+                        {votePlayer != null ? (
+                          <button
+                            className="btn bg-stone-900  text-white tracking-widest"
+                            onClick={() => {
+                              (
+                                document.getElementById(
+                                  "voteconfirm"
+                                ) as HTMLDialogElement
+                              )?.showModal();
+                            }}
+                          >
+                            Vote
+                          </button>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </>
+                  )
+                }
+              </>
+            )}
           </div>
         </>
       )}
