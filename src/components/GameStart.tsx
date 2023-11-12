@@ -14,6 +14,7 @@ const GameStart = ({ params, roomdetail }: any) => {
   const [isDiscussCountdown, setIsDiscussCountdown] = useState(false);
   const [votePlayer, setVotePlayer] = useState<any>(null);
   const [role, setRole] = useState<any>(null);
+  const [master, setMaster] = useState<any>(null);
   const [word, setWord] = useState<any>(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
@@ -22,8 +23,9 @@ const GameStart = ({ params, roomdetail }: any) => {
   const router = useRouter();
   useEffect(() => {
     socket.on("getrole", (data: any) => {
-      setRole(data.role);
-      setWord(data.word);
+      setRole(data.player.role);
+      setWord(data.player.word);
+      setMaster(data.master.name);
     });
     socket.on("starttimer", () => {
       setIsStartCountdown(true);
@@ -43,6 +45,9 @@ const GameStart = ({ params, roomdetail }: any) => {
     });
     socket.on("voting", () => {
       setIsVoting(true);
+    });
+    socket.on("allvoted", () => {
+      router.replace(`/${params.lang}/room/${params.id}/result`);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -280,31 +285,36 @@ const GameStart = ({ params, roomdetail }: any) => {
                       <div className="flex flex-col justify-between gap-10">
                         <h1 className=" text-white text-5xl">Voting</h1>
                         <div className=" join join-vertical">
-                          {roomdetail.player.map((player: any) => {
-                            return (
-                              <>
-                                <button
-                                  className={
-                                    player.name != votePlayer
-                                      ? "btn bg-stone-900  text-white tracking-widest join-item no-animation hover:none"
-                                      : "btn bg-white text-black tracking-widest border-0 join-item no-animation hover:none"
-                                  }
-                                  onClick={() => {
-                                    setVotePlayer(player.name);
-                                  }}
-                                >
-                                  {player.name}
-                                  {player.name == votePlayer ? (
-                                    <span className="badge bg-red-500 border-0">
-                                      <AiFillEye className="text-white" />
-                                    </span>
-                                  ) : (
-                                    <></>
-                                  )}
-                                </button>
-                              </>
-                            );
-                          })}
+                          {roomdetail.player
+                            .filter(
+                              (player: any) =>
+                                player.name != master && player.name != name
+                            )
+                            .map((player: any) => {
+                              return (
+                                <>
+                                  <button
+                                    className={
+                                      player.name != votePlayer
+                                        ? "btn bg-stone-900  text-white tracking-widest join-item no-animation hover:none"
+                                        : "btn bg-white text-black tracking-widest border-0 join-item no-animation hover:none"
+                                    }
+                                    onClick={() => {
+                                      setVotePlayer(player.name);
+                                    }}
+                                  >
+                                    {player.name}
+                                    {player.name == votePlayer ? (
+                                      <span className="badge bg-red-500 border-0">
+                                        <AiFillEye className="text-white" />
+                                      </span>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </button>
+                                </>
+                              );
+                            })}
                         </div>
                         <dialog id="voteconfirm" className="modal">
                           <div className="modal-box bg-stone-900 text-white">

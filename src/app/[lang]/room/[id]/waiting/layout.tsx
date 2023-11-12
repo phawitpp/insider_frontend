@@ -1,5 +1,4 @@
 "use client";
-import Navbar from "@/components/Nav";
 export default function RoomLayout({
   children, // will be a page or nested layout
 }: {
