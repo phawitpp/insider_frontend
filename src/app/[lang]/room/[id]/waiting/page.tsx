@@ -19,7 +19,7 @@ export default function Waiting({ params }: any) {
   return (
     <>
       <div className="loading loading-dots text-white text-2xl"></div>
-      <span className="text-white text-2xl">
+      <span className="text-white text-lg">
         {" "}
         Waiting for another player to vote.
       </span>

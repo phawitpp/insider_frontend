@@ -52,7 +52,7 @@ const CreateRoom = ({ params }: any) => {
         </button>
         <input
           type="number"
-          className="w-16 text-center py-2 border border-gray-400 rounded font-semibold text-white mx-2"
+          className="w-16 text-center py-2 border border-gray-400 rounded font-semibold text-black mx-2"
           value={numPlayers}
           onChange={(e) => {
             if (parseInt(e.target.value) > 10) {
@@ -119,7 +119,7 @@ const CreateRoom = ({ params }: any) => {
       </div>
       <div className="mt-10 inline-flex gap-6">
         <button
-          className="btn btn-sm text-white tracking-widest"
+          className="btn btn-sm text-white tracking-widest bg-stone-900 border-0"
           onClick={() => {
             router.push(`/${params.lang}`);
           }}
@@ -127,7 +127,7 @@ const CreateRoom = ({ params }: any) => {
           Back
         </button>
         <button
-          className="btn btn-sm text-white tracking-widest"
+          className="btn btn-sm text-white tracking-widest bg-stone-900 border-0"
           onClick={() => {
             (
               document.getElementById("confirm") as HTMLDialogElement
@@ -137,16 +137,20 @@ const CreateRoom = ({ params }: any) => {
           Create
         </button>
       </div>
-      <dialog id="confirm" className="modal text-white">
-        <div className="modal-box">
-          <p className="py-4 tracking-wide">Are you sure to create the game?</p>
+      <dialog id="confirm" className="modal text-white bg-stone-900 border-0">
+        <div className="modal-box bg-stone-900 border-0">
+          <p className="py-4 tracking-wide text-white">
+            Are you sure to create the game?
+          </p>
           <div className="modal-action">
             <form method="dialog">
-              <button className="btn text-white tracking-widest">Cancel</button>
+              <button className="btn text-white tracking-widest bg-stone-900 border-0">
+                Cancel
+              </button>
             </form>
             <div>
               <button
-                className="btn text-white tracking-widest"
+                className="btn text-white tracking-widest bg-stone-900 border-0"
                 onClick={async () => {
                   handleCreateRoom();
                 }}

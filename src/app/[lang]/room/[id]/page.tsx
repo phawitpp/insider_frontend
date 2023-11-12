@@ -90,19 +90,19 @@ export default function GameRoom({ params }: any) {
           })
         }
         <div className="flex gap-10 py-8">
-          <dialog id="my_modal_1" className="modal">
-            <div className="modal-box">
+          <dialog id="my_modal_1" className="modal bg-stone-900 border-0">
+            <div className="modal-box bg-stone-900 border-0">
               <h3 className="font-bold text-lg text-white">Oops!</h3>
               <p className="py-4 text-white">You need more player to start .</p>
               <div className="modal-action">
                 <form method="dialog">
-                  <button className="btn bg-slate-800">Close</button>
+                  <button className="btn bg-slate-800 text-white">Close</button>
                 </form>
               </div>
             </div>
           </dialog>
           <button
-            className="btn text-white tracking-widest bg-slate-800"
+            className="btn text-white tracking-widest bg-slate-800 border-0"
             onClick={() => {
               handleLeave();
             }}
@@ -111,7 +111,7 @@ export default function GameRoom({ params }: any) {
           </button>
           {roomDetail?.host.name == name ? (
             <button
-              className="btn bg-slate-800 text-white tracking-widest"
+              className="btn bg-slate-800 text-white tracking-widest border-0"
               onClick={() => {
                 if (roomDetail.player.length < roomDetail.numberplayer) {
                   (

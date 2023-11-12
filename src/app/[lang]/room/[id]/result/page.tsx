@@ -37,14 +37,18 @@ export default function Waiting({ params }: any) {
     <>
       {result.result.role == "insider" ? (
         <>
-          <h1 className=" text-6xl text-black">Insider Win !!!</h1>
+          <h1 className=" text-6xl text-black mt-2">Insider Win</h1>
+        </>
+      ) : result.result.role == "common" ? (
+        <>
+          <h1 className=" text-6xl text-black mt-2">Common Win</h1>
         </>
       ) : (
         <></>
       )}
       <div className="mt-4 p-10 flex flex-col justify-start gap-5 text-white">
         <div className="flex flex-col">
-          <div className="flex flex-row gap-1">
+          <div className="flex flex-row gap-1 text-black">
             <BsExclamationLg className="text-2xl" />
             <span className="text-2xl">Master</span>
           </div>
@@ -64,7 +68,7 @@ export default function Waiting({ params }: any) {
             })}
         </div>
         <div className="flex flex-col justify-center">
-          <div className="flex flex-row gap-1">
+          <div className="flex flex-row gap-1 text-black">
             <AiFillEye className="text-2xl" />
             <span className="text-2xl">Insider</span>
           </div>
@@ -84,7 +88,7 @@ export default function Waiting({ params }: any) {
             })}
         </div>
         <div className="flex flex-col ">
-          <div className="flex flex-row gap-1">
+          <div className="flex flex-row gap-1 text-black">
             <BsQuestion className="text-2xl" />
             <span className="text-2xl">Common</span>
           </div>
@@ -105,7 +109,7 @@ export default function Waiting({ params }: any) {
         </div>
       </div>
       <button
-        className="btn bg-stone-900 text-white"
+        className="btn bg-stone-900 text-white border-0"
         onClick={() => {
           router.push(`/${params.lang}`);
         }}
