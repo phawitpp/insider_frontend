@@ -14,7 +14,7 @@ const WebSocketProvider = ({ children }: any) => {
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   useEffect(() => {
-    const socketInstance = new (ClientID as any)("localhost:3001", {
+    const socketInstance = new (ClientID as any)(process.env.API_URL, {
       transports: ["websocket"],
     });
 
