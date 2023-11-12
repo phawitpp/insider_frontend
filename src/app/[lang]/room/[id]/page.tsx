@@ -90,7 +90,7 @@ export default function GameRoom({ params }: any) {
           })
         }
         <div className="flex gap-10 py-8">
-          <dialog id="my_modal_1" className="modal bg-stone-900 border-0">
+          <dialog id="my_modal_1" className="modal">
             <div className="modal-box bg-stone-900 border-0">
               <h3 className="font-bold text-lg text-white">Oops!</h3>
               <p className="py-4 text-white">You need more player to start .</p>

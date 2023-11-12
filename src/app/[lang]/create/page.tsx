@@ -52,7 +52,7 @@ const CreateRoom = ({ params }: any) => {
         </button>
         <input
           type="number"
-          className="w-16 text-center py-2 border border-gray-400 rounded font-semibold text-black mx-2"
+          className="w-16 text-center py-2 border border-gray-400 rounded font-semibold text-black mx-2 bg-white"
           value={numPlayers}
           onChange={(e) => {
             if (parseInt(e.target.value) > 10) {
@@ -137,7 +137,7 @@ const CreateRoom = ({ params }: any) => {
           Create
         </button>
       </div>
-      <dialog id="confirm" className="modal text-white bg-stone-900 border-0">
+      <dialog id="confirm" className="modal text-white">
         <div className="modal-box bg-stone-900 border-0">
           <p className="py-4 tracking-wide text-white">
             Are you sure to create the game?
