@@ -37,11 +37,11 @@ export default function Waiting({ params }: any) {
     <>
       {result.result.role == "insider" ? (
         <>
-          <h1 className=" text-6xl text-black mt-2">Insider Win</h1>
+          <h1 className=" text-4xl text-black mt-2">Insider Win</h1>
         </>
       ) : result.result.role == "common" ? (
         <>
-          <h1 className=" text-6xl text-black mt-2">Common Win</h1>
+          <h1 className=" text-4xl text-black mt-2">Common Win</h1>
         </>
       ) : (
         <></>
@@ -55,26 +55,6 @@ export default function Waiting({ params }: any) {
       </span>
       <div className="mt-4 p-10 flex flex-col justify-start gap-5 text-white">
         <div className="flex flex-col">
-          <div className="flex flex-row gap-1 text-black">
-            <BsExclamationLg className="text-2xl" />
-            <span className="text-2xl">Master</span>
-          </div>
-          {result?.player
-            ?.filter((player: any) => player.role == "master")
-            .map((player: any) => {
-              return (
-                <>
-                  <div className="flex flex-row justify-between items-center">
-                    <span className="text-white text-xl">{player.name}</span>
-                    <span className="text-white text-xl">
-                      {"Voted: " + player.voting}
-                    </span>
-                  </div>
-                </>
-              );
-            })}
-        </div>
-        <div className="flex flex-col justify-center">
           <div className="flex flex-row gap-1 text-black">
             <AiFillEye className="text-2xl" />
             <span className="text-2xl">Insider</span>
