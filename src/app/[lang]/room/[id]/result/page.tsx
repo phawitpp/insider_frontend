@@ -37,11 +37,11 @@ export default function Waiting({ params }: any) {
     <>
       {result.result.role == "insider" ? (
         <>
-          <h1 className=" text-4xl text-black mt-2">Insider Win</h1>
+          <h1 className=" text-4xl text-black mt-2">Common Win</h1>
         </>
       ) : result.result.role == "common" ? (
         <>
-          <h1 className=" text-4xl text-black mt-2">Common Win</h1>
+          <h1 className=" text-4xl text-black mt-2">Insider Win</h1>
         </>
       ) : (
         <></>
@@ -59,18 +59,18 @@ export default function Waiting({ params }: any) {
             <AiFillEye className="text-2xl" />
             <span className="text-2xl">Insider</span>
           </div>
-          {result?.player
+          {result.player.length > 0 && result?.player
             ?.filter((player: any) => player.role == "insider")
             .map((player: any) => {
               return (
-                <>
+                
                   <div className="flex flex-row justify-between items-center">
                     <span className="text-white text-xl">{player.name}</span>
                     <span className="text-white text-xl">
                       {"Voted: " + player.voting}
                     </span>
                   </div>
-                </>
+                
               );
             })}
         </div>
@@ -79,18 +79,18 @@ export default function Waiting({ params }: any) {
             <BsQuestion className="text-2xl" />
             <span className="text-2xl">Common</span>
           </div>
-          {result?.player
+          {result.player.length > 0 && result?.player
             ?.filter((player: any) => player.role == "common")
             .map((player: any) => {
               return (
-                <>
+                
                   <div className="flex flex-row justify-between items-center">
                     <span className="text-white text-xl">{player.name}</span>
                     <span className="text-white text-xl">
                       {"Voted: " + player.voting}
                     </span>
                   </div>
-                </>
+                
               );
             })}
         </div>
