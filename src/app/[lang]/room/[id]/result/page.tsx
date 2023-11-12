@@ -49,7 +49,7 @@ export default function Waiting({ params }: any) {
       <span className=" text-2xl text-black mt-2">
         The word is{" "}
         {
-          result.player?.filter((player: any) => player.role == "master")[0]
+          result.player.length > 0 && result.player?.filter((player: any) => player.role == "master")[0]
             .word
         }
       </span>
