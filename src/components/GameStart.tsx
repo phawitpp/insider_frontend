@@ -166,7 +166,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                   <div className=" items-center justify-center flex flex-col p-4 gap-3">
                     <div></div>
                     <div className=" divider text-black"> Time Left</div>
-                    <span className="font-bold text-5xl text-white">
+                    <span className="font-bold text-5xl text-white shadow-sm">
                       {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                     </span>
                     {role == "master" ? (
@@ -174,7 +174,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                         {isStartCountdown ? (
                           <div className="flex flex-col gap-2">
                             <button
-                              className="btn bg-stone-900  text-white tracking-widest"
+                              className="btn bg-stone-900  text-white tracking-widest border-0"
                               onClick={() => {
                                 socket.emit("stoptimer", { roomId: params.id });
                               }}
@@ -182,7 +182,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                               Stop Timer
                             </button>
                             <button
-                              className="btn border-0 bg-gray-700 text-white tracking-widest"
+                              className="btn border-0 bg-gray-700 text-white tracking-widest bottom-0"
                               onClick={() => {
                                 socket.emit("gameover", { roomId: params.id });
                               }}
@@ -193,7 +193,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                         ) : (
                           <div className="flex">
                             <button
-                              className="btn bg-stone-900  text-white tracking-widest"
+                              className="btn bg-stone-900  text-white tracking-widest border-0"
                               onClick={() => {
                                 socket.emit("starttimer", {
                                   roomId: params.id,
@@ -220,7 +220,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                       <h1 className=" text-white text-3xl">Discussion</h1>
                       <div></div>
                       <div className=" divider text-black"> Time Left</div>
-                      <span className="font-bold text-5xl text-white">
+                      <span className="font-bold text-5xl text-white shadow-sm">
                         {discussMinutes}:
                         {discussSeconds < 10
                           ? `0${discussSeconds}`
@@ -232,7 +232,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                             {role == "master" ? (
                               <>
                                 <button
-                                  className="btn bg-stone-900  text-white tracking-widest"
+                                  className="btn bg-stone-900  text-white tracking-widest border-0"
                                   onClick={() => {
                                     socket.emit("stopdiscussion", {
                                       roomId: params.id,
@@ -242,7 +242,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                                   Stop Discussion
                                 </button>
                                 <button
-                                  className="btn border-0 bg-gray-700 text-white tracking-widest"
+                                  className="btn border-0 bg-gray-700 text-white tracking-widest border-0"
                                   onClick={() => {
                                     socket.emit("voting", {
                                       roomId: params.id,
@@ -262,7 +262,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                               // @ts-ignore
                               role == "master" ? (
                                 <button
-                                  className="btn bg-stone-900  text-white tracking-widest"
+                                  className="btn bg-stone-900  text-white tracking-widest border-0"
                                   onClick={() => {
                                     socket.emit("startdiscussion", {
                                       roomId: params.id,
@@ -296,7 +296,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                                   <button
                                     className={
                                       player.name != votePlayer
-                                        ? "btn bg-stone-900  text-white tracking-widest join-item no-animation hover:none"
+                                        ? "btn bg-stone-900  text-white tracking-widest join-item no-animation hover:none border-0"
                                         : "btn bg-white text-black tracking-widest border-0 join-item no-animation hover:none"
                                     }
                                     onClick={() => {
@@ -324,12 +324,12 @@ const GameStart = ({ params, roomdetail }: any) => {
                             </p>
                             <div className="modal-action">
                               <form method="dialog">
-                                <button className="btn bg-black text-white">
+                                <button className="btn bg-black text-white border-0">
                                   Close
                                 </button>
                               </form>
                               <button
-                                className="btn bg-black text-white"
+                                className="btn bg-black text-white border-0"
                                 onClick={() => {
                                   socket.emit("voted", {
                                     roomId: params.id,
@@ -347,7 +347,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                         </dialog>
                         {votePlayer != null ? (
                           <button
-                            className="btn bg-stone-900  text-white tracking-widest"
+                            className="btn bg-stone-900  text-white tracking-widest border-0"
                             onClick={() => {
                               (
                                 document.getElementById(
