@@ -46,6 +46,13 @@ export default function Waiting({ params }: any) {
       ) : (
         <></>
       )}
+      <span className=" text-2xl text-black mt-2">
+        The word is{" "}
+        {
+          result.player?.filter((player: any) => player.role == "master")[0]
+            .word
+        }
+      </span>
       <div className="mt-4 p-10 flex flex-col justify-start gap-5 text-white">
         <div className="flex flex-col">
           <div className="flex flex-row gap-1 text-black">

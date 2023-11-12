@@ -166,7 +166,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                   <div className=" items-center justify-center flex flex-col p-4 gap-3">
                     <div></div>
                     <div className=" divider text-black"> Time Left</div>
-                    <span className="font-bold text-5xl text-white shadow-sm">
+                    <span className="font-bold text-5xl text-white text-shadow-sm">
                       {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
                     </span>
                     {role == "master" ? (
@@ -220,7 +220,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                       <h1 className=" text-white text-3xl">Discussion</h1>
                       <div></div>
                       <div className=" divider text-black"> Time Left</div>
-                      <span className="font-bold text-5xl text-white shadow-sm">
+                      <span className="font-bold text-5xl text-white text-shadow-sm">
                         {discussMinutes}:
                         {discussSeconds < 10
                           ? `0${discussSeconds}`
