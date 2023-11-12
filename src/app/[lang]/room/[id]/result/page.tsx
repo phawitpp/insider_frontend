@@ -63,14 +63,14 @@ export default function Waiting({ params }: any) {
             ?.filter((player: any) => player.role == "insider")
             .map((player: any) => {
               return (
-                
+                <>
                   <div className="flex flex-row justify-between items-center">
                     <span className="text-white text-xl">{player.name}</span>
                     <span className="text-white text-xl">
                       {"Voted: " + player.voting}
                     </span>
                   </div>
-                
+                </>
               );
             })}
         </div>
@@ -83,14 +83,14 @@ export default function Waiting({ params }: any) {
             ?.filter((player: any) => player.role == "common")
             .map((player: any) => {
               return (
-                
+                <>
                   <div className="flex flex-row justify-between items-center">
                     <span className="text-white text-xl">{player.name}</span>
                     <span className="text-white text-xl">
                       {"Voted: " + player.voting}
                     </span>
                   </div>
-                
+                </>
               );
             })}
         </div>
