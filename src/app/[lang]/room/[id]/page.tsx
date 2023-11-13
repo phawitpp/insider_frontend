@@ -11,7 +11,7 @@ export default function GameRoom({ params }: any) {
   const router = useRouter();
   const { name }: any = useGameStore();
   const [roomDetail, setRoomDetail] = useState<any>(null);
-
+  const lang = params.lang;
   useEffect(() => {
     socket.on("notfound", () => {
       alert("Room not found");
@@ -37,7 +37,7 @@ export default function GameRoom({ params }: any) {
     roomDetail.status == "waiting" ? (
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-2xl md:text-4xl font-bold text-black tracking-wider">
-          Waiting room
+          {lang == "th" ? "กำลังรอผู้เล่น..." : "Waiting for player..."}
         </h1>
 
         <div className="flex flex-col md:flex-row">
@@ -50,15 +50,18 @@ export default function GameRoom({ params }: any) {
             }}
           />
           <div className="flex flex-col justify-center items-center py-4">
-            <span className="text-xl text-black">Game code: </span>
+            <span className="text-xl text-black font-bold tracking-widest">
+              {lang == "th" ? "รหัสห้อง " : "Room code "}
+            </span>
             <span className="text-2xl font-bold text-white tracking-wider">
               {params.id}
             </span>
-            <span className="text-2xl font-bold text-white tracking-wider"></span>
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold text-black tracking-wider">Player</h3>
+        <h3 className="text-2xl font-bold text-black tracking-wider">
+          {lang == "th" ? "ผู้เล่น" : "Player"}
+        </h3>
         {
           // @ts-ignore
           roomDetail?.player?.map((player: any) => {
@@ -69,20 +72,24 @@ export default function GameRoom({ params }: any) {
                   roomDetail.host.name == name ? (
                     <div className="flex flex-row justify-center items-center\">
                       <span className="text-xl text-black">
-                        {name + "(You) (Host)"}
+                        {lang == "th"
+                          ? name + "(คุณ)(เจ้าของ)"
+                          : name + "(You)(Host)"}
                       </span>
                     </div>
                   ) : (
                     <div className="flex flex-row justify-center items-center\">
                       <span className="text-xl text-black">
-                        {name + "(You)"}
+                        {lang == "th" ? name + "(คุณ)" : name + "(You)"}
                       </span>
                     </div>
                   )
                 ) : roomDetail.host.name == player.name ? (
                   <div className="flex flex-row justify-center items-center">
                     <span className="text-xl text-white">
-                      {player.name + "(Host)"}
+                      {lang == "th"
+                        ? player.name + "(เจ้าของ)"
+                        : player.name + "(Host)"}
                     </span>
                   </div>
                 ) : (
@@ -97,26 +104,42 @@ export default function GameRoom({ params }: any) {
         <div className="flex gap-10 py-8">
           <dialog id="my_modal_1" className="modal">
             <div className="modal-box bg-stone-900 border-0">
-              <h3 className="font-bold text-lg text-white">Oops!</h3>
-              <p className="py-4 text-white">You need more player to start .</p>
+              <h3 className="font-bold text-lg text-white">
+                {lang == "th" ? "อุ๊ป!" : "Oops!"}
+              </h3>
+              <p className="py-4 text-white">
+                {lang == "th"
+                  ? "ต้องให้ผู้เล่นครบก่อนถึงจะเริ่มได้"
+                  : "ํYou need more player to start."}
+              </p>
               <div className="modal-action">
                 <form method="dialog">
-                  <button className="btn bg-slate-800 text-white">Close</button>
+                  <button className="btn bg-slate-800 text-white">
+                    {lang == "th" ? "ปิด" : "Close"}
+                  </button>
                 </form>
               </div>
             </div>
           </dialog>
           <button
-            className="btn text-white tracking-widest bg-slate-800 border-0 font-medium"
+            className={
+              lang == "th"
+                ? "btn btn-md w-24 bg-slate-800 text-white tracking-widest border-0"
+                : "btn bg-slate-800 text-white tracking-widest border-0 font-medium"
+            }
             onClick={() => {
               handleLeave();
             }}
           >
-            Leave
+            {lang == "th" ? "ออก" : "Leave"}
           </button>
           {roomDetail?.host.name == name ? (
             <button
-              className="btn bg-slate-800 text-white tracking-widest border-0 font-medium"
+              className={
+                lang == "th"
+                  ? "btn btn-md w-24 bg-slate-800 text-white tracking-widest border-0"
+                  : "btn bg-slate-800 text-white tracking-widest border-0 font-medium"
+              }
               onClick={() => {
                 if (roomDetail.player.length < roomDetail.numberplayer) {
                   (
@@ -125,7 +148,7 @@ export default function GameRoom({ params }: any) {
                 } else socket.emit("start", { roomId: params.id });
               }}
             >
-              Start
+              {lang == "th" ? "เริ่ม" : "Start"}
             </button>
           ) : (
             <></>

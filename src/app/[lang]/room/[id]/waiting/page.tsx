@@ -9,7 +9,7 @@ export default function Waiting({ params }: any) {
   const { socket, isConnected } = useSocket();
   const router = useRouter();
   const { name }: any = useGameStore();
-
+  const lang = params.lang;
   useEffect(() => {
     socket.on("allvoted", () => {
       router.push(`/${params.lang}/room/${params.id}/result`);
@@ -25,7 +25,9 @@ export default function Waiting({ params }: any) {
       <div className="loading loading-dots text-white text-2xl"></div>
       <span className="text-white text-lg">
         {" "}
-        Waiting for another player to vote.
+        {lang == "th"
+          ? "โปรดรอผู้เล่นคนอื่นทำการโหวต"
+          : "Waiting for another player to vote"}
       </span>
     </>
   );
