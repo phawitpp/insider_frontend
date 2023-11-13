@@ -1,9 +1,10 @@
 "use client";
-import { getDictionary } from "../dictionaries/dictionary";
+import { useParams } from "next/navigation";
 import { AiFillEye } from "react-icons/ai";
 // eslint-disable-next-line @next/next/no-async-client-component
 export default async function Navbar() {
-  const lang = await getDictionary("en");
+  const router = useParams();
+  const lang = router["lang"];
   return (
     <div className="navbar">
       <div className="navbar-start"></div>
@@ -11,7 +12,7 @@ export default async function Navbar() {
         {" "}
         <AiFillEye className=" text-black text-4xl" />
         <h1 className="text-2xl font-bold text-black tracking-wider">
-          {lang?.text.title}
+          {lang == "th" ? "จอมบงการ" : "INSINDER"}
         </h1>
       </div>
       <div className="navbar-end"></div>

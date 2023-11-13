@@ -21,6 +21,7 @@ const GameStart = ({ params, roomdetail }: any) => {
   const { socket, isConnected } = useSocket();
   const { name }: any = useGameStore();
   const router = useRouter();
+  const lang = params.lang;
   useEffect(() => {
     socket.on("getrole", (data: any) => {
       setRole(data.player.role);
@@ -130,10 +131,13 @@ const GameStart = ({ params, roomdetail }: any) => {
                         </figure>
                         <div className="card-body">
                           <h1 className="card-title text-center text-2xl justify-center">
-                            You are a insider
+                            {lang == "th"
+                              ? "คุณคือจอมบงการ"
+                              : "You are a insider"}
                           </h1>
                           <p className=" justify-center card-body items-center">
-                            The word is {"" + word + ""}
+                            {lang == "th" ? "คำที่ต้องทายคือ " : "The word is "}
+                            {"" + word + ""}
                           </p>
                         </div>
                       </div>
@@ -144,10 +148,13 @@ const GameStart = ({ params, roomdetail }: any) => {
                         </figure>
                         <div className="card-body">
                           <h1 className="card-title text-center text-2xl justify-center">
-                            You are a Master
+                            {lang == "th"
+                              ? "คุณคือผู้ดำเนินเกม"
+                              : "You are a Master"}
                           </h1>
                           <p className=" justify-center card-body items-center">
-                            The word is {"" + word + ""}
+                            {lang == "th" ? "คำที่ต้องทายคือ " : "The word is "}{" "}
+                            {"" + word + ""}
                           </p>
                         </div>
                       </div>
@@ -158,10 +165,12 @@ const GameStart = ({ params, roomdetail }: any) => {
                         </figure>
                         <div className="card-body">
                           <h1 className="card-title text-center text-2xl justify-center">
-                            You are a common
+                            {lang == "th"
+                              ? "คุณคือคนทั่วไป"
+                              : "You are a common"}
                           </h1>
                           <p className=" justify-center card-body items-center">
-                            Guess the word!
+                            {lang == "th" ? "ทายคำกันเลย!" : "Guess the word!"}{" "}
                           </p>
                         </div>
                       </div>
@@ -169,9 +178,13 @@ const GameStart = ({ params, roomdetail }: any) => {
                   }
                   <div className=" items-center justify-center flex flex-col p-4 gap-3">
                     <div></div>
-                    <div className=" divider text-black"> Time Left</div>
+                    <div className=" divider text-black">
+                      {" "}
+                      {lang == "th" ? "เหลือเวลา" : "Time Left"}
+                    </div>
                     <span className="font-bold text-5xl text-white text-shadow-sm">
-                      {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                      {minutes}:{seconds < 10 ? `0${seconds}` : seconds}{" "}
+                      {lang == "th" ? "นาที" : "Mins"}
                     </span>
                     {role == "master" ? (
                       <>
@@ -183,7 +196,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                                 socket.emit("stoptimer", { roomId: params.id });
                               }}
                             >
-                              Stop Timer
+                              {lang == "th" ? "หยุดเวลา" : "Stop Timer"}
                             </button>
                             <button
                               className="btn border-0 bg-gray-700 text-white tracking-widest bottom-0 font-normal shadow-md hover:bg-gray-800"
@@ -191,11 +204,13 @@ const GameStart = ({ params, roomdetail }: any) => {
                                 socket.emit("gameover", { roomId: params.id });
                               }}
                             >
-                              Word is guessed
+                              {lang == "th"
+                                ? "คำถูกทายแล้ว"
+                                : "Word is guessed"}
                             </button>
                           </div>
                         ) : (
-                          <div className="flex">
+                          <div className="flex mt-4">
                             <button
                               className="btn bg-stone-900  text-white tracking-widest border-0 font-normal shadow-md"
                               onClick={() => {
@@ -204,7 +219,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                                 });
                               }}
                             >
-                              Start Timer
+                              {lang == "th" ? "เริ่มจับเวลา" : "Start Timer"}
                             </button>
                           </div>
                         )}
@@ -221,14 +236,20 @@ const GameStart = ({ params, roomdetail }: any) => {
                   //discussion
                   !isVoting ? (
                     <>
-                      <h1 className=" text-white text-3xl">Discussion</h1>
+                      <h1 className=" text-white text-3xl">
+                        {lang == "th" ? "ช่วงออกความเห็น" : "Discussion"}
+                      </h1>
                       <div></div>
-                      <div className=" divider text-black"> Time Left</div>
+                      <div className=" divider text-black">
+                        {" "}
+                        {lang == "th" ? "เหลือเวลา" : "Time Left"}
+                      </div>
                       <span className="font-bold text-5xl text-white text-shadow-sm">
                         {discussMinutes}:
                         {discussSeconds < 10
                           ? `0${discussSeconds}`
                           : discussSeconds}
+                        {lang == "th" ? " นาที" : " Mins"}
                       </span>
                       <div className="flex flex-col gap-2 mt-4">
                         {isDiscussCountdown ? (
@@ -243,7 +264,9 @@ const GameStart = ({ params, roomdetail }: any) => {
                                     });
                                   }}
                                 >
-                                  Stop Discussion
+                                  {lang == "th"
+                                    ? "หยุดการเจรจา"
+                                    : "Stop Discussion"}
                                 </button>
                                 <button
                                   className="btn border-0 bg-gray-700 text-white tracking-widest font-normal shadow-md"
@@ -253,7 +276,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                                     });
                                   }}
                                 >
-                                  Voting
+                                  {lang == "th" ? "ข้ามไปโหวต" : "Skip to vote"}
                                 </button>
                               </>
                             ) : (
@@ -273,7 +296,9 @@ const GameStart = ({ params, roomdetail }: any) => {
                                     });
                                   }}
                                 >
-                                  Start Discussion
+                                  {lang == "th"
+                                    ? "เริ่มเจรจา"
+                                    : "Start Discussion"}
                                 </button>
                               ) : (
                                 <></>
@@ -287,7 +312,9 @@ const GameStart = ({ params, roomdetail }: any) => {
                     //voting
                     <>
                       <div className="flex flex-col justify-between gap-10">
-                        <h1 className=" text-white text-5xl">Voting</h1>
+                        <h1 className=" text-white text-5xl">
+                          {lang == "th" ? "โหวตผู้เล่น" : "Player vote"}
+                        </h1>
                         <div className=" join join-vertical">
                           {roomdetail.player
                             .filter(
@@ -322,14 +349,19 @@ const GameStart = ({ params, roomdetail }: any) => {
                         </div>
                         <dialog id="voteconfirm" className="modal">
                           <div className="modal-box bg-stone-900 text-white">
-                            <h3 className="font-bold text-lg ">Are you sure</h3>
+                            <h3 className="font-bold text-lg ">
+                              {lang == "th" ? "ยืนยันหรือไม่" : "Are you sure"}
+                            </h3>
                             <p className="py-4">
-                              You want to vote for {votePlayer}
+                              {lang == "th"
+                                ? "คุณต้องการโหวต "
+                                : "You want to vote for "}{" "}
+                              {votePlayer} {lang == "th" ? " ใช่หรือไม่" : ""}
                             </p>
                             <div className="modal-action">
                               <form method="dialog">
                                 <button className="btn bg-black text-white border-0 font-medium">
-                                  Close
+                                  {lang == "th" ? "ยกเลิก" : "Cancel"}
                                 </button>
                               </form>
                               <button
@@ -344,7 +376,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                                   );
                                 }}
                               >
-                                Confirm
+                                {lang == "th" ? "ยีนยัน" : "Confirm"}
                               </button>
                             </div>
                           </div>
@@ -360,7 +392,7 @@ const GameStart = ({ params, roomdetail }: any) => {
                               )?.showModal();
                             }}
                           >
-                            Vote
+                            {lang == "th" ? "โหวต" : "Vote"}
                           </button>
                         ) : (
                           <></>

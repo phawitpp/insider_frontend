@@ -18,7 +18,7 @@ export default function Waiting({ params }: any) {
   });
   const router = useRouter();
   const { name }: any = useGameStore();
-
+  const lang = params.lang;
   useEffect(() => {
     socket.on("allvoted", () => {
       router.push(`/${params.lang}/room/${params.id}/result`);
@@ -37,19 +37,26 @@ export default function Waiting({ params }: any) {
       <div className="flex flex-col items-center">
         {result.result.role == "insider" ? (
           <>
-            <h1 className=" text-5xl text-black mt-2">Common Win</h1>
+            <h1 className=" text-5xl text-black mt-2">
+              {lang == "th" ? "คนทั่วไปชนะ" : "Common Win"}
+            </h1>
           </>
         ) : result.result.role == "common" ? (
           <>
-            <h1 className=" text-5xl text-black mt-2">Insider Win</h1>
+            <h1 className=" text-5xl text-black mt-2">
+              {lang == "th" ? "จอมบงการชนะ" : "Insider Win"}
+            </h1>
           </>
         ) : (
           <>
-            <h1 className=" text-5xl text-black mt-2">Tie</h1>
+            <h1 className=" text-5xl text-black mt-2">
+              {" "}
+              {lang == "th" ? "เสมอกัน" : "Tie"}
+            </h1>
           </>
         )}
         <span className=" text-2xl text-black mt-2">
-          The word is{" "}
+          {lang == "th" ? "คำทายคือ" : "The word is"}{" "}
           {result.player.length > 0 &&
             result.player?.filter((player: any) => player.role == "master")[0]
               .word}
@@ -58,7 +65,9 @@ export default function Waiting({ params }: any) {
           <div className="flex flex-col items-center">
             <div className="flex flex-row  text-black justify-center items-center">
               <AiFillEye className="text-2xl" />
-              <span className="text-2xl">Insider </span>
+              <span className="text-2xl">
+                {lang == "th" ? "จอมบงการ" : "Insider"}{" "}
+              </span>
             </div>
             {result.player.length > 0 &&
               result?.player
@@ -84,7 +93,7 @@ export default function Waiting({ params }: any) {
             router.push(`/${params.lang}/room/${params.id}/`);
           }}
         >
-          Play Again
+          {lang == "th" ? "เล่นอีกครั่ง" : "Play Again"}
         </button>
         <button
           className="btn bg-gray-700 text-white border-0 font-medium tracking-widest"
@@ -92,7 +101,7 @@ export default function Waiting({ params }: any) {
             router.push(`/${params.lang}`);
           }}
         >
-          Back to home
+          {lang == "th" ? "กลับหน้าหลัก" : "Back to home"}
         </button>
       </div>
     </>

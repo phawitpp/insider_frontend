@@ -4,7 +4,8 @@ import { QrReader } from "react-qr-reader";
 import { useRouter } from "next/navigation";
 import { useSocket } from "@/utils/socketProvider";
 import { useGameStore } from "@/utils/storeProvider";
-export default function GameMenu({ lang }: any) {
+import { getDictionary } from "@/dictionaries/dictionary";
+const GameMenu = ({ lang }: any) => {
   const [roomCode, setRoomCode] = useState("");
   const [nickname, setNickname] = useState("");
   const [showScanner, setShowScanner] = useState(false);
@@ -19,7 +20,7 @@ export default function GameMenu({ lang }: any) {
         type="text"
         value={nickname}
         className="input input-md bg-slate-800 text-white"
-        placeholder="Set player name"
+        placeholder={lang == "th" ? "ตั้งชื่อผู้เล่น" : "Set player name"}
         onChange={(e) => setNickname(e.target.value)}
       />
 
@@ -28,7 +29,7 @@ export default function GameMenu({ lang }: any) {
         onClick={() => {
           if (nickname.length > 0) {
             setName(nickname);
-            router.push(`/${"en"}/create`);
+            router.push(`/${lang}/create`);
           } else {
             (
               document.getElementById("my_modal_1") as HTMLDialogElement
@@ -36,42 +37,28 @@ export default function GameMenu({ lang }: any) {
           }
         }}
       >
-        Create Game
+        {lang == "th" ? "สร้างห้อง" : "Create Room"}
       </a>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box bg-slate-800">
           <h3 className="font-bold text-lg text-white tracking-widest">
-            Oops!
+            {lang == "th" ? "อุ๊ป!" : "Oops!"}
           </h3>
           <p className="py-4 text-white tracking-widest">
-            Press set the player name first .
+            {lang == "th"
+              ? "โปรดตั้งชื่อก่อน"
+              : "Press set the player name first ."}
           </p>
           <div className="modal-action">
             <form method="dialog">
               <button className="btn bg-slate-800 text-white font-medium">
-                Close
+                {lang == "th" ? "ปิด" : "Close"}
               </button>
             </form>
           </div>
         </div>
       </dialog>
-      <dialog id="noroom" className="modal">
-        <div className="modal-box bg-slate-800">
-          <h3 className="font-bold text-lg text-white tracking-widest">
-            Oops!
-          </h3>
-          <p className="py-4 text-white tracking-widest">
-            Room does not exits! .
-          </p>
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn bg-slate-800 text-white font-medium">
-                Close
-              </button>
-            </form>
-          </div>
-        </div>
-      </dialog>
+
       <dialog id="loading_modal" className="modal">
         <div className="modal-box bg-slate-800">
           <div className="py-4">
@@ -79,9 +66,9 @@ export default function GameMenu({ lang }: any) {
           </div>
         </div>
       </dialog>
-      <div className="divider">OR</div>
+      <div className="divider">{lang == "th" ? "หรือ" : "OR"}</div>
       <label htmlFor="room-code-input" className=" text-sm">
-        Enter room code:
+        {lang == "th" ? "โปรดใส่เลขห้อง: " : "Enter room code:"}
       </label>
       <input
         id="room-code-input"
@@ -126,7 +113,7 @@ export default function GameMenu({ lang }: any) {
         onClick={() => setShowScanner(true)}
         className=" underline text-sm"
       >
-        Scan QR Code
+        {lang == "th" ? "แสกน QR Code" : "Scan QR Code"}
       </button>
       {showScanner && (
         <QrReader
@@ -148,4 +135,5 @@ export default function GameMenu({ lang }: any) {
       )}
     </div>
   );
-}
+};
+export default GameMenu;
