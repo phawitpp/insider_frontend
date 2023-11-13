@@ -1,22 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { useRouter } from "next/navigation";
 import { useSocket } from "@/utils/socketProvider";
 import { useGameStore } from "@/utils/storeProvider";
-export default function GameMenu() {
+export default function GameMenu({ lang }: any) {
   const [roomCode, setRoomCode] = useState("");
   const [nickname, setNickname] = useState("");
   const [showScanner, setShowScanner] = useState(false);
   const { socket, isConnected } = useSocket();
-  const handleScan = (data: string | null) => {
-    if (data) {
-      setRoomCode(data);
-      setShowScanner(false);
-    }
-  };
   const router = useRouter();
   const { setName }: any = useGameStore();
+
   return (
     <div className="text-white flex flex-col gap-1">
       <input
@@ -29,7 +24,7 @@ export default function GameMenu() {
       />
 
       <a
-        className="btn text-white input-md tracking-widest bg-slate-800 border-0"
+        className="btn text-white input-md tracking-widest bg-slate-800 border-0 font-medium"
         onClick={() => {
           if (nickname.length > 0) {
             setName(nickname);
@@ -45,17 +40,40 @@ export default function GameMenu() {
       </a>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box bg-slate-800">
-          <h3 className="font-bold text-lg text-white">Oops!</h3>
-          <p className="py-4 text-white">Press set the player name first .</p>
+          <h3 className="font-bold text-lg text-white tracking-widest">
+            Oops!
+          </h3>
+          <p className="py-4 text-white tracking-widest">
+            Press set the player name first .
+          </p>
           <div className="modal-action">
             <form method="dialog">
-              <button className="btn bg-slate-800 text-white">Close</button>
+              <button className="btn bg-slate-800 text-white font-medium">
+                Close
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      <dialog id="noroom" className="modal">
+        <div className="modal-box bg-slate-800">
+          <h3 className="font-bold text-lg text-white tracking-widest">
+            Oops!
+          </h3>
+          <p className="py-4 text-white tracking-widest">
+            Room does not exits! .
+          </p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn bg-slate-800 text-white font-medium">
+                Close
+              </button>
             </form>
           </div>
         </div>
       </dialog>
       <dialog id="loading_modal" className="modal">
-        <div className="modal-box">
+        <div className="modal-box bg-slate-800">
           <div className="py-4">
             <span className="loading loading-spinner"></span>
           </div>
@@ -78,7 +96,7 @@ export default function GameMenu() {
                 roomId: e.target.value.toString(),
                 player: nickname,
               });
-              router.replace(`/${"en"}/room/${e.target.value}`);
+              router.replace(`/${lang}/room/${e.target.value}`);
             } else {
               (
                 document.getElementById("my_modal_1") as HTMLDialogElement
@@ -86,6 +104,22 @@ export default function GameMenu() {
             }
           }
           setRoomCode(e.target.value);
+        }}
+        onKeyDown={(e: any) => {
+          if (e.key === "Enter") {
+            if (nickname.length > 0) {
+              setName(nickname);
+              socket.emit("join", {
+                roomId: e.target.value.toString(),
+                player: nickname,
+              });
+              router.replace(`/${"en"}/room/${e.target.value}`);
+            } else {
+              (
+                document.getElementById("my_modal_1") as HTMLDialogElement
+              )?.showModal();
+            }
+          }
         }}
       />
       <button

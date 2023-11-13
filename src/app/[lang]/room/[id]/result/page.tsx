@@ -25,7 +25,6 @@ export default function Waiting({ params }: any) {
     });
     socket.on("result", (data: any) => {
       setResult(data);
-      console.log(data);
     });
   }, [socket]);
 
@@ -35,74 +34,67 @@ export default function Waiting({ params }: any) {
 
   return (
     <>
-      {result.result.role == "insider" ? (
-        <>
-          <h1 className=" text-4xl text-black mt-2">Common Win</h1>
-        </>
-      ) : result.result.role == "common" ? (
-        <>
-          <h1 className=" text-4xl text-black mt-2">Insider Win</h1>
-        </>
-      ) : (
-        <></>
-      )}
-      <span className=" text-2xl text-black mt-2">
-        The word is{" "}
-        {
-          result.player.length > 0 && result.player?.filter((player: any) => player.role == "master")[0]
-            .word
-        }
-      </span>
-      <div className="mt-4 p-10 flex flex-col justify-start gap-5 text-white">
-        <div className="flex flex-col">
-          <div className="flex flex-row gap-1 text-black">
-            <AiFillEye className="text-2xl" />
-            <span className="text-2xl">Insider</span>
+      <div className="flex flex-col items-center">
+        {result.result.role == "insider" ? (
+          <>
+            <h1 className=" text-5xl text-black mt-2">Common Win</h1>
+          </>
+        ) : result.result.role == "common" ? (
+          <>
+            <h1 className=" text-5xl text-black mt-2">Insider Win</h1>
+          </>
+        ) : (
+          <>
+            <h1 className=" text-5xl text-black mt-2">Tie</h1>
+          </>
+        )}
+        <span className=" text-2xl text-black mt-2">
+          The word is{" "}
+          {result.player.length > 0 &&
+            result.player?.filter((player: any) => player.role == "master")[0]
+              .word}
+        </span>
+        <div className="mt-4 p-10 flex flex-col justify-start gap-5 text-white">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row  text-black justify-center items-center">
+              <AiFillEye className="text-2xl" />
+              <span className="text-2xl">Insider </span>
+            </div>
+            {result.player.length > 0 &&
+              result?.player
+                ?.filter((player: any) => player.role == "insider")
+                .map((player: any) => {
+                  return (
+                    <>
+                      <span className="text-white text-5xl">{player.name}</span>
+                    </>
+                  );
+                })}
           </div>
-          {result.player.length > 0 && result?.player
-            ?.filter((player: any) => player.role == "insider")
-            .map((player: any) => {
-              return (
-                <>
-                  <div className="flex flex-row justify-between items-center">
-                    <span className="text-white text-xl">{player.name}</span>
-                    <span className="text-white text-xl">
-                      {"Voted: " + player.voting}
-                    </span>
-                  </div>
-                </>
-              );
-            })}
-        </div>
-        <div className="flex flex-col ">
-          <div className="flex flex-row gap-1 text-black">
-            <BsQuestion className="text-2xl" />
-            <span className="text-2xl">Common</span>
-          </div>
-          {result.player.length > 0 && result?.player
-            ?.filter((player: any) => player.role == "common")
-            .map((player: any) => {
-              return (
-                <>
-                  <div className="flex flex-row justify-between items-center">
-                    <span className="text-white text-xl">{player.name}</span>
-                    <span className="text-white text-xl">
-                      {"Voted: " + player.voting}
-                    </span>
-                  </div>
-                </>
-              );
-            })}
         </div>
       </div>
-      <button
-        className="btn bg-stone-900 text-white border-0"
-        onClick={() => {
-          router.push(`/${params.lang}`);
-        }}
-      >
-        Back to home
-      </button>
+      <div className="flex flex-col gap-4">
+        <button
+          className="btn bg-stone-900 text-white border-0 font-medium tracking-widest"
+          onClick={() => {
+            const player = result.player.filter(
+              (player: any) => player.id == socket.id
+            )[0];
+            socket.emit("playagain", { roomId: params.id, player: player });
+            router.push(`/${params.lang}/room/${params.id}/`);
+          }}
+        >
+          Play Again
+        </button>
+        <button
+          className="btn bg-gray-700 text-white border-0 font-medium tracking-widest"
+          onClick={() => {
+            router.push(`/${params.lang}`);
+          }}
+        >
+          Back to home
+        </button>
+      </div>
     </>
   );
 }

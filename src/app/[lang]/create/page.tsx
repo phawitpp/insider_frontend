@@ -51,8 +51,8 @@ const CreateRoom = ({ params }: any) => {
           -
         </button>
         <input
-          type="number"
-          className="w-16 text-center py-2 border border-gray-400 rounded font-semibold text-black mx-2 bg-white"
+          type="text"
+          className="w-16 text-center py-2 border border-gray-400 rounded font-semibold text-black mx-2 bg-white appearance-none"
           value={numPlayers}
           onChange={(e) => {
             if (parseInt(e.target.value) > 10) {
@@ -119,7 +119,7 @@ const CreateRoom = ({ params }: any) => {
       </div>
       <div className="mt-10 inline-flex gap-6">
         <button
-          className="btn btn-sm text-white tracking-widest bg-stone-900 border-0"
+          className="btn btn-md text-white tracking-widest bg-stone-900 border-0 font-medium"
           onClick={() => {
             router.push(`/${params.lang}`);
           }}
@@ -127,7 +127,7 @@ const CreateRoom = ({ params }: any) => {
           Back
         </button>
         <button
-          className="btn btn-sm text-white tracking-widest bg-stone-900 border-0"
+          className="btn btn-md text-white tracking-widest bg-stone-900 border-0 font-medium"
           onClick={() => {
             (
               document.getElementById("confirm") as HTMLDialogElement

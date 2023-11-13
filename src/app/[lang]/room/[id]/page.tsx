@@ -13,8 +13,12 @@ export default function GameRoom({ params }: any) {
   const [roomDetail, setRoomDetail] = useState<any>(null);
 
   useEffect(() => {
+    socket.on("notfound", () => {
+      alert("Room not found");
+      router.push(`/${params.lang}`);
+    });
     socket.on("newjoin", async (data: any) => {
-      await setRoomDetail(data);
+      setRoomDetail(data);
     });
     socket.on("full", () => {
       alert("Room is full");
@@ -35,6 +39,7 @@ export default function GameRoom({ params }: any) {
         <h1 className="text-2xl md:text-4xl font-bold text-black tracking-wider">
           Waiting room
         </h1>
+
         <div className="flex flex-col md:flex-row">
           <QRCode
             value={params.id}
@@ -102,7 +107,7 @@ export default function GameRoom({ params }: any) {
             </div>
           </dialog>
           <button
-            className="btn text-white tracking-widest bg-slate-800 border-0"
+            className="btn text-white tracking-widest bg-slate-800 border-0 font-medium"
             onClick={() => {
               handleLeave();
             }}
@@ -111,7 +116,7 @@ export default function GameRoom({ params }: any) {
           </button>
           {roomDetail?.host.name == name ? (
             <button
-              className="btn bg-slate-800 text-white tracking-widest border-0"
+              className="btn bg-slate-800 text-white tracking-widest border-0 font-medium"
               onClick={() => {
                 if (roomDetail.player.length < roomDetail.numberplayer) {
                   (
@@ -134,7 +139,7 @@ export default function GameRoom({ params }: any) {
     )
   ) : (
     <div className="flex flex-col justify-center items-center">
-      <div className="loading loading-spinner loading-lg"></div>
+      <div className="loading loading-spinner loading-lg text-white"></div>
     </div>
   );
 }
