@@ -7,7 +7,7 @@ export default function RoomLayout({
 }) {
   return (
     <>
-      <div className=" justify-center flex flex-col items-center">
+      <div className=" justify-center flex flex-col items-center gap-3 lg:gap-20 lg:flex-row">
         {children}
       </div>
     </>

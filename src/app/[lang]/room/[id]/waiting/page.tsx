@@ -14,6 +14,10 @@ export default function Waiting({ params }: any) {
     socket.on("allvoted", () => {
       router.push(`/${params.lang}/room/${params.id}/result`);
     });
+    socket.on("someoneleave", () => {
+      alert("Someone leave the room");
+      router.replace(`/${params.lang}`);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
   return (

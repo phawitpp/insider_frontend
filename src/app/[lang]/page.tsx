@@ -33,7 +33,7 @@ const Page = async ({ params }: any) => {
         </div>
       </div>
 
-      <GameMenu />
+      <GameMenu lang={params.lang} />
     </div>
   );
 };

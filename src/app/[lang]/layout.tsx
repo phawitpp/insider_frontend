@@ -27,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang={params.lang}>
       <body className={params.lang == "en" ? anton.className : mitr.className}>
-        <WebSocketProvider>{children}</WebSocketProvider>
+        <WebSocketProvider>
+          <main>{children}</main>
+        </WebSocketProvider>
       </body>
     </html>
   );
