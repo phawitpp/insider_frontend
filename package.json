@@ -13,6 +13,7 @@
     "@types/negotiator": "^0.6.2",
     "daisyui": "^3.9.4",
     "i18next": "^23.6.0",
+    "mobile-detect": "^1.4.5",
     "negotiator": "^0.6.3",
     "next": "^14.0.1",
     "react": "^18",

@@ -5,9 +5,12 @@ import { getDictionary } from "@/dictionaries/dictionary";
 import GameMenu from "@/components/GameMenu";
 import { useLangStore } from "@/utils/storeProvider";
 import { useRouter } from "next/navigation";
+import MobileDetect from "mobile-detect";
 // eslint-disable-next-line @next/next/no-async-client-component
 const Page = ({ params }: any) => {
   const router = useRouter();
+  const md = new MobileDetect(window.navigator.userAgent);
+
   if (!!!params.lang) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center p-24">
@@ -81,6 +84,45 @@ const Page = ({ params }: any) => {
       </div>
 
       <GameMenu lang={params.lang} />
+      {md.os() == "iPadOS" ||
+      md.is("iPad") ||
+      md.match("Macintosh; Intel Mac OS X") ? (
+        <div
+          className="alert lg:w-7/12 mt-8 bg-stone-800 border-0 text-white"
+          id="info"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="stroke-white shrink-0 w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span>
+            {params.lang == "th"
+              ? "สำหรับคนใช้ iPad ให้อัพเดท IOS เป็น version ล่าสุด"
+              : "For iPad users, please update IOS to the latest version."}
+          </span>
+          <div>
+            <button
+              className="btn btn-sm"
+              onClick={() => {
+                document.getElementById("info")?.remove();
+              }}
+            >
+              {params.lang == "th" ? "ปิด" : "Close"}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
