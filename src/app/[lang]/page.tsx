@@ -83,8 +83,8 @@ const Page = ({ params }: any) => {
         </div>
       </div>
       {/* open here */}
-      {/* <GameMenu lang={params.lang} /> */}
-      <span>Website is under maintenance....</span>
+      <GameMenu lang={params.lang} />
+      {/* <span>Website is under maintenance....</span> */}
       {md.os() == "iPadOS" ||
       md.is("iPad") ||
       md.match("Macintosh; Intel Mac OS X") ? (
