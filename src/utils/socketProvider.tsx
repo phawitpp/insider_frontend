@@ -21,7 +21,9 @@ const WebSocketProvider = ({ children }: any) => {
     socketInstance.on("connect", function () {
       setIsConnected(true);
     });
-
+    socketInstance.on("reconnect", function () {
+      setIsConnected(true);
+    });
     socketInstance.on("disconnect", function () {
       setIsConnected(false);
     });
